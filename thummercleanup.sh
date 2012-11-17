@@ -15,11 +15,11 @@ do
 		if [ -f "$IMAGE_SOURCE" ]; then
 			if [ `stat -c %Y "$IMAGE_THUMBNAIL"` != `stat -c %Y "$IMAGE_SOURCE"` ]; then
 				# thumbnail modification time does not equal that of source
-				rm "$IMAGE_THUMBNAIL"
+				rm -f "$IMAGE_THUMBNAIL"
 			fi
 		else
 			# source image no longer exists
-			rm "$IMAGE_THUMBNAIL"
+			rm -f "$IMAGE_THUMBNAIL"
 		fi
 	fi
 done

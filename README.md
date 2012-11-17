@@ -69,21 +69,21 @@ Refer to the supplied `rewrite.nginx.conf` & `rewrite.apache.conf` for examples.
 ### All done
 Assuming everything is configured correctly the following should now occur:
 
-- Request is made to a thumbnail image path (e.g. http://mywebsite.com/content/imagethumb/WxH/filename.ext)
-- URL rewrite rules check if static image exists on disk
-- It does so web server simply returns thumbnail without involving `thummer.php`
-- **...or** static thumbnail image does not yet exist
-	- Server rewrites URL to `thummer.php`
-	- Thummer reads source image successfully, generates thumbnail and saves back to server
-	- Now redirects URL back to re-request the static thumbnail image
-	- Future thumbnail requests now fetch static thumbnail
+- Request is made for a thumbnail image (e.g. http://mywebsite.com/content/imagethumb/WxH/filename.ext)
+- URL rewrite rules check if static image already exists on disk
+- **a)** It does, so web server simply returns thumbnail without involving `thummer.php`
+- **b)** Static thumbnail image does not yet exist
+	- Web server rewrites URL to `thummer.php`
+	- Thummer reads source image, generates thumbnail at requested dimensions and saves image file back to server
+	- Finally `thummer.php` redirects URL back to re-request the static thumbnail image
+	- Future thumbnail requests now fetch the static thumbnail
 
 ## But what if my source images change?
-Since thummer relies on the fact that repeat requests to the same thumbnail won't involve `thummer.php` to save CPU cycles, updates to the source image file won't automatically reflected in generated thumbnails. For many use cases this may not be an issue to worry about vs. the benefit.
+Since thummer relies on the fact that repeat requests to the same thumbnail won't involve `thummer.php` to save CPU cycles, updates to source image files won't automatically reflected in generated thumbnails. For many use cases this may not be an issue to worry about vs. the benefit.
 
-If this will be an issue refer to the example `thummercleanup.sh` bash script, which will check generated thumbnails against the source image that:
+If this will be an issue, refer to the example `thummercleanup.sh` bash script, which can be used to compare generated thumbnails against the source image that:
 
-- The source image actually still exists
+- The source image still exists
 - Timestamps for the thumbnail vs. source are identical (`thummer.php` timestamps thumbnails back to the source file for this reason)
 
-If either of these conditions are not met, the script will delete the thumbnail in question allowing `thummer.php` to re-create on next request of the thumbnail. This script once configured could then be run as a regular cron job.
+If either of these conditions are not met, the script will delete the thumbnail in question. This then allows `thummer.php` to re-create on next request of the thumbnail. This script once configured could then be run as a regular cron job.
