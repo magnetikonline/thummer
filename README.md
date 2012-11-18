@@ -21,7 +21,7 @@ To request *100x50*, *200x300* and *180x90* thumbnails respectively, you do the 
 	http://mywebsite.com/content/imagethumb/200x300/oranges.png
 	http://mywebsite.com/content/imagethumb/180x90/peach.gif
 
-As a bonus thummer would write the result of these thumbnails back to `/content/imagethumb/WxH/filename.ext` on your web server, so via the magic of URL rewrites the next request will simply return the **static** image back to the browser, saving precious CPU cycles.
+As a bonus, thummer will write the result of these thumbnails back to `/content/imagethumb/WxH/filename.ext` on your web server, so via the magic of URL rewrites the next request will simply return the **static** image back to the browser, saving precious CPU cycles.
 
 ## Installing
 
@@ -64,7 +64,7 @@ Drop `thummer.php` into your web app and update the class constants as follows:
 </table>
 
 ### Setup URL rewrite rules
-Refer to the supplied `rewrite.nginx.conf` & `rewrite.apache.conf` for examples. Of course for Apache, these rules could be placed into a `.htaccess` file.
+Refer to the supplied `rewrite.nginx.conf` & `rewrite.apache.conf` for examples. Of course for Apache, these rules could be placed into a `.htaccess` file, or your `httpd.conf`.
 
 ### All done
 Assuming everything is configured correctly the following should now occur:
