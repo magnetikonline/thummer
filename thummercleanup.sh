@@ -5,7 +5,7 @@ BASE_TARGET_DIR="/webapp/docroot/content/imagethumb";
 
 
 # fetch all thumbnail images
-for IMAGE_THUMBNAIL in `find "$BASE_TARGET_DIR" -type f`
+for IMAGE_THUMBNAIL in `find "$BASE_TARGET_DIR" -name "*.jpg" -or -name "*.jpeg" -or -name "*.png" -or -name "*.gif" -type f`
 do
 	# strip thumbnail path and WxH component
 	IMAGE_SOURCE=${IMAGE_THUMBNAIL#$BASE_TARGET_DIR/}
