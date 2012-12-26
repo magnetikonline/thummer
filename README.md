@@ -9,7 +9,7 @@ This is an easy as pie web image thumbnail generator with width & height options
 - Nginx or Apache URL rewrite support
 
 ## Usage
-So you have a directory of images accessible on your web server like so:
+So you have a directory of images accessible on your web server:
 
 	http://mywebsite.com/content/image/apples.jpg
 	http://mywebsite.com/content/image/oranges.png
