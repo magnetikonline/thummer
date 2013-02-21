@@ -1,8 +1,4 @@
 <?php
-// thummber.php
-
-
-
 class Thummer {
 
 	const MIN_LENGTH = 50;
@@ -15,8 +11,7 @@ class Thummer {
 	const FAIL_IMAGE_LOG = false;
 
 
-
-	public function execute() {
+	public function __construct() {
 
 		// get requested thumbnail from URI
 		$requestURI = trim($_SERVER['REQUEST_URI']);
@@ -190,5 +185,4 @@ class Thummer {
 }
 
 
-$thummer = new Thummer();
-$thummer->execute();
+new Thummer();
