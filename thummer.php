@@ -105,6 +105,7 @@ class Thummer {
 		// create source/target GD images and resize/resample
 		$imageSrc = $this->createSourceGDImage($sourceType,self::BASE_SOURCE_DIR . $targetImagePathSuffix);
 		$imageDst = imagecreatetruecolor($targetWidth,$targetHeight);
+
 		imagecopyresampled(
 			$imageDst,$imageSrc,0,0,
 			$this->calcThumbnailSourceCopyPoint($sourceWidth,$copyWidth),$this->calcThumbnailSourceCopyPoint($sourceHeight,$copyHeight),
@@ -112,32 +113,30 @@ class Thummer {
 			$copyWidth,$copyHeight
 		);
 
-		// construct full path to target image on disk, temporary filename and then if required create target image path
+		// construct full path to target image on disk, temp filename and then if required create target image path
 		$targetImagePathFull = sprintf('%s/%dx%d%s',self::BASE_TARGET_DIR,$targetWidth,$targetHeight,$targetImagePathSuffix);
-		$targetImagePathFullTmp = $targetImagePathFull . '.' . md5(uniqid());
+		$targetImagePathFullTemp = $targetImagePathFull . '.' . md5(uniqid());
 		if (!is_dir(dirname($targetImagePathFull))) mkdir(dirname($targetImagePathFull),0777,true);
 
-		// save image to temporary filename
+		// save image to temp file
 		switch ($sourceType) {
 			case IMAGETYPE_GIF:
-				imagegif($imageDst,$targetImagePathFullTmp);
+				imagegif($imageDst,$targetImagePathFullTemp);
 				break;
 
 			case IMAGETYPE_JPEG:
-				imagejpeg($imageDst,$targetImagePathFullTmp,self::JPEG_IMAGE_QUALITY);
+				imagejpeg($imageDst,$targetImagePathFullTemp,self::JPEG_IMAGE_QUALITY);
 				break;
 
 			default:
-				imagepng($imageDst,$targetImagePathFullTmp);
+				imagepng($imageDst,$targetImagePathFullTemp);
 		}
 
-		// move into place avoiding possible concurrency issues between thummer requests upon the same source image/dimensions
-		rename($targetImagePathFullTmp,$targetImagePathFull);
-
-		// set thumbnail timestamp to same as source image
+		// move temp image file into place, avoiding race conditions between thummer requests and set modify timestamp to source image
+		rename($targetImagePathFullTemp,$targetImagePathFull);
 		touch($targetImagePathFull,filemtime(self::BASE_SOURCE_DIR . $targetImagePathSuffix));
 
-		// destroy gd images
+		// destroy GD image instances
 		imagedestroy($imageSrc);
 		imagedestroy($imageDst);
 	}
