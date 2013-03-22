@@ -47,11 +47,15 @@ Drop `thummer.php` into your web app and update the class constants as follows:
 	</tr>
 	<tr>
 		<td>REQUEST_PREFIX_URL_PATH</td>
-		<td>Prefix for thumbnail request URLs, before <strong>/WxH/</strong> component. Without trailing slash.</td>
+		<td>Prefix for thumbnail request URLs, before the <strong>/WxH/</strong> component. Without trailing slash.</td>
 	</tr>
 	<tr>
 		<td>JPEG_IMAGE_QUALITY</td>
 		<td>Thumbnail save quality for JPEG image type. Between 0-100.</td>
+	</tr>
+	<tr>
+		<td>PNG_SAVE_TRANSPARENCY</td>
+		<td>If true, PNG thumbnails will be saved with source image transparency preserved.</td>
 	</tr>
 	<tr>
 		<td>FAIL_IMAGE_URL_PATH</td>

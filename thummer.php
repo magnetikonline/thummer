@@ -7,6 +7,7 @@ class Thummer {
 	const BASE_TARGET_DIR = '/webapp/docroot/content/imagethumb';
 	const REQUEST_PREFIX_URL_PATH = '/content/imagethumb';
 	const JPEG_IMAGE_QUALITY = 75;
+	const PNG_SAVE_TRANSPARENCY = false;
 	const FAIL_IMAGE_URL_PATH = '/content/thumbfail.jpg';
 	const FAIL_IMAGE_LOG = false;
 
@@ -37,7 +38,7 @@ class Thummer {
 			return;
 		}
 
-		// source image is all good - generate thumbnail
+		// source image all good
 		$this->generateThumbnail($requestedThumb,$sourceImageDetail);
 
 		// redirect back to initial URL to display generated thumbnail image
@@ -77,6 +78,7 @@ class Thummer {
 
 		// valid web image? return width/height/type
 		$detail = @getimagesize($srcPath);
+
 		if (
 			(is_array($detail)) &&
 			(($detail[2] == IMAGETYPE_GIF) || ($detail[2] == IMAGETYPE_JPEG) || ($detail[2] == IMAGETYPE_PNG))
@@ -106,6 +108,12 @@ class Thummer {
 		$imageSrc = $this->createSourceGDImage($sourceType,self::BASE_SOURCE_DIR . $targetImagePathSuffix);
 		$imageDst = imagecreatetruecolor($targetWidth,$targetHeight);
 
+		if (($sourceType == IMAGETYPE_PNG) && self::PNG_SAVE_TRANSPARENCY) {
+			// save PNG transparency in target thumbnail
+			imagealphablending($imageDst,false);
+			imagesavealpha($imageDst,true);
+		}
+
 		imagecopyresampled(
 			$imageDst,$imageSrc,0,0,
 			$this->calcThumbnailSourceCopyPoint($sourceWidth,$copyWidth),$this->calcThumbnailSourceCopyPoint($sourceHeight,$copyHeight),
@@ -113,7 +121,7 @@ class Thummer {
 			$copyWidth,$copyHeight
 		);
 
-		// construct full path to target image on disk, temp filename and then if required create target image path
+		// construct full path to target image on disk, temp filename and (if not exist) create target image path
 		$targetImagePathFull = sprintf('%s/%dx%d%s',self::BASE_TARGET_DIR,$targetWidth,$targetHeight,$targetImagePathSuffix);
 		$targetImagePathFullTemp = $targetImagePathFull . '.' . md5(uniqid());
 		if (!is_dir(dirname($targetImagePathFull))) mkdir(dirname($targetImagePathFull),0777,true);
@@ -128,7 +136,7 @@ class Thummer {
 				imagejpeg($imageDst,$targetImagePathFullTemp,self::JPEG_IMAGE_QUALITY);
 				break;
 
-			default:
+			default: // PNG image
 				imagepng($imageDst,$targetImagePathFullTemp);
 		}
 
