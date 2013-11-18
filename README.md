@@ -35,7 +35,7 @@ Drop `thummer.php` into your web app and update the class constants as follows:
 	</tr>
 	<tr>
 		<td>MAX_LENGTH</td>
-		<td>Maximum width/height of a requested thumbnail, everything less will respond 404.</td>
+		<td>Maximum width/height of a requested thumbnail, everything larger will respond 404.</td>
 	</tr>
 	<tr>
 		<td>BASE_SOURCE_DIR</td>
