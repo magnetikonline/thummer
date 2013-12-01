@@ -68,7 +68,7 @@ Drop `thummer.php` into your web app and update the class constants as follows:
 </table>
 
 ### Setup URL rewrite rules
-Refer to the supplied `rewrite.nginx.conf` & `rewrite.apache.conf` for examples. Of course for Apache, these rules could be placed into a `.htaccess` file, or your `httpd.conf`.
+Refer to the supplied `rewrite.nginx.conf` & `rewrite.apache.conf` for examples. For Apache, these rules can be placed into either a `.htaccess` file or (better yet) the web servers `/etc/apache2/apache2.conf`.
 
 **Note:** it's strongly recommended in a production environment to adjust the rewrite rules, targeting the specific set of widths/heights you require, rather than arbitrary lengths to avoid a possible flooding of thumbnail images to disk of limitless dimensions. Examples for this are provided as comments in both `rewrite.nginx.conf` & `rewrite.apache.conf`.
 
