@@ -6,6 +6,7 @@ class Thummer {
 	const BASE_SOURCE_DIR = '/webapp/docroot/content/image';
 	const BASE_TARGET_DIR = '/webapp/docroot/content/imagethumb';
 	const REQUEST_PREFIX_URL_PATH = '/content/imagethumb';
+	const SHARPEN_THUMBNAIL = true;
 	const JPEG_IMAGE_QUALITY = 75;
 	const PNG_SAVE_TRANSPARENCY = false;
 	const FAIL_IMAGE_URL_PATH = '/content/thumbfail.jpg';
@@ -35,6 +36,7 @@ class Thummer {
 			// source image invalid - redirect to fail image
 			$this->redirectURL(self::FAIL_IMAGE_URL_PATH);
 			$this->logFailImage($requestedThumb[2]);
+
 			return;
 		}
 
@@ -121,6 +123,9 @@ class Thummer {
 			$copyWidth,$copyHeight
 		);
 
+		// sharpen thumbnail
+		$this->sharpenThumbnail($imageDst);
+
 		// construct full path to target image on disk, temp filename and (if not exist) create target image path
 		$targetImagePathFull = sprintf('%s/%dx%d%s',self::BASE_TARGET_DIR,$targetWidth,$targetHeight,$targetImagePathSuffix);
 		$targetImagePathFullTemp = $targetImagePathFull . '.' . md5(uniqid());
@@ -160,6 +165,23 @@ class Thummer {
 
 		$point = intval(($sourceLength / 2) - ($copyLength / 2));
 		return max($point,0);
+	}
+
+	private function sharpenThumbnail($image) {
+
+		if (!self::SHARPEN_THUMBNAIL) return;
+
+		// build matrix and divisor
+		$MATRIX = array(
+			array(-1.2,-1,-1.2),
+			array(-1,20,-1),
+			array(-1.2,-1,-1.2)
+		);
+
+		$DIVISOR = 11.2; // note: array_sum(array_map('array_sum',$MATRIX));
+
+		// apply sharpen to image
+		imageconvolution($image,$MATRIX,$DIVISOR,0);
 	}
 
 	private function logFailImage($source) {

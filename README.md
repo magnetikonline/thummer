@@ -50,12 +50,16 @@ Drop `thummer.php` into your web app and update the class constants as follows:
 		<td>Prefix for thumbnail request URLs, before the <strong>/WxH/</strong> component. Without trailing slash.</td>
 	</tr>
 	<tr>
+		<td>SHARPEN_THUMBNAIL</td>
+		<td>If set <strong>true</strong> resized images will have a sharpen process applied before save. Implementation taken <a href="http://www.php.net/manual/en/function.imageconvolution.php#104006">from here</a>. This will more than likely result in extra CPU overhead, so you may wish to disable this option.</td>
+	</tr>
+	<tr>
 		<td>JPEG_IMAGE_QUALITY</td>
 		<td>Thumbnail save quality for JPEG image type. Between 0-100.</td>
 	</tr>
 	<tr>
 		<td>PNG_SAVE_TRANSPARENCY</td>
-		<td>If true, PNG thumbnails will be saved with source image transparency preserved.</td>
+		<td>If set <strong>true</strong>, PNG thumbnails will be saved with source image transparency preserved.</td>
 	</tr>
 	<tr>
 		<td>FAIL_IMAGE_URL_PATH</td>
