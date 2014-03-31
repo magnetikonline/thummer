@@ -26,7 +26,7 @@ As a bonus, thummer will write the result of these thumbnails back to `/content/
 ## Install
 
 ### Configure thummer.php
-Drop `thummer.php` into your web app and update the class constants as follows:
+Drop [`thummer.php`](thummer.php) into your web app and update the class constants as follows:
 
 <table>
 	<tr>
@@ -72,7 +72,7 @@ Drop `thummer.php` into your web app and update the class constants as follows:
 </table>
 
 ### Setup URL rewrite rules
-Refer to the supplied `rewrite.nginx.conf` & `rewrite.apache.conf` for examples. For Apache, these rules can be placed into either a `.htaccess` file or (better yet) the web servers `/etc/apache2/apache2.conf`.
+Refer to the supplied [`rewrite.nginx.conf`](rewrite.nginx.conf) & [`rewrite.apache.conf`](rewrite.apache.conf) for examples. For Apache, these rules can be placed into either a `.htaccess` file or (better yet) the web servers `/etc/apache2/apache2.conf`.
 
 **Note:** it's strongly recommended in a production environment to adjust the rewrite rules, targeting the specific set of widths/heights you require, rather than arbitrary lengths to avoid a possible flooding of thumbnail images to disk of limitless dimensions. Examples for this are provided as comments in both `rewrite.nginx.conf` & `rewrite.apache.conf`.
 
@@ -90,7 +90,7 @@ Assuming everything is configured correctly the following should now occur:
 ## But what if my source images change?
 Since thummer relies on the fact that repeat requests to the same thumbnail won't involve `thummer.php` to save CPU cycles, updates to source image files won't automatically reflected in generated thumbnails. For many use cases this may not be an issue to worry about vs. the benefit.
 
-If this will be an issue, refer to the example `thummercleanup.sh` bash script, which can compare generated thumbnails against the source image to ensure:
+If this will be an issue, refer to the example [`thummercleanup.sh`](thummercleanup.sh) bash script, which can compare generated thumbnails against the source image to ensure:
 - The source image still exists.
 - Timestamps for the thumbnail vs. source are identical (**note:** `thummer.php` timestamps generated thumbnails to that of the source file for exactly this purpose).
 
