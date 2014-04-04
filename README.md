@@ -3,7 +3,7 @@ Rhymes with hummer.
 
 This is an easy as pie web image thumbnail generator with width & height options given by request URL, plus thumbnail file caching back to original URL path - avoiding any server CPU overhead for repeated requests of the same thumbnail. Will handle JPEG, PNG and GIF images.
 
-## Requires
+## Requirements
 - PHP 5.2+ (tested against PHP 5.5.10)
 - [PHP GD extension](http://php.net/manual/en/book.image.php) (should be compiled into most PHP installs)
 - Nginx, Apache (or equivalent) URL rewrite support
@@ -51,7 +51,7 @@ Drop [`thummer.php`](thummer.php) into your web app and update the class constan
 	</tr>
 	<tr>
 		<td>SHARPEN_THUMBNAIL</td>
-		<td>If set <strong>true</strong> resized images will have a sharpen process applied before save. Implementation taken <a href="http://www.php.net/manual/en/function.imageconvolution.php#104006">from here</a>. This will more than likely result in extra CPU overhead, so you may wish to disable this option.</td>
+		<td>If set <strong>true</strong> resized images will have a sharpen process applied before save. Implementation taken <a href="http://php.net/manual/en/function.imageconvolution.php#104006">from here</a>. This will more than likely result in extra CPU overhead, so you may wish to disable this option.</td>
 	</tr>
 	<tr>
 		<td>JPEG_IMAGE_QUALITY</td>
