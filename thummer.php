@@ -96,14 +96,14 @@ class Thummer {
 		list($targetWidth,$targetHeight,$targetImagePathSuffix) = $requestedThumb;
 		list($sourceWidth,$sourceHeight,$sourceType) = $sourceImageDetail;
 
-		$targetAspectRatio = $targetHeight / $targetWidth;
-		$copyWidth = $sourceWidth;
-		$copyHeight = intval($sourceWidth * $targetAspectRatio);
+		$targetAspectRatio = $targetWidth / $targetHeight;
+		$copyWidth = intval($sourceHeight * $targetAspectRatio);
+		$copyHeight = $sourceHeight;
 
-		if ($copyHeight > $sourceHeight) {
-			// resize copy width fixed to target aspect
-			$copyWidth = intval($sourceHeight / $targetAspectRatio);
-			$copyHeight = $sourceHeight;
+		if ($copyWidth > $sourceWidth) {
+			// resize copy height fixed to target aspect
+			$copyWidth = $sourceWidth;
+			$copyHeight = intval($sourceWidth / $targetAspectRatio);
 		}
 
 		// create source/target GD images and resize/resample
@@ -163,7 +163,7 @@ class Thummer {
 
 	private function calcThumbnailSourceCopyPoint($sourceLength,$copyLength) {
 
-		$point = intval(($sourceLength / 2) - ($copyLength / 2));
+		$point = intval(($sourceLength - $copyLength) / 2);
 		return max($point,0);
 	}
 
