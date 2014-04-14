@@ -126,10 +126,20 @@ class Thummer {
 		// sharpen thumbnail
 		$this->sharpenThumbnail($imageDst);
 
-		// construct full path to target image on disk, temp filename and (if not exist) create target image path
+		// construct full path to target image on disk and temp filename
 		$targetImagePathFull = sprintf('%s/%dx%d%s',self::BASE_TARGET_DIR,$targetWidth,$targetHeight,$targetImagePathSuffix);
 		$targetImagePathFullTemp = $targetImagePathFull . '.' . md5(uniqid());
-		if (!is_dir(dirname($targetImagePathFull))) mkdir(dirname($targetImagePathFull),0777,true);
+
+		// if target image path doesn't exist, create it now
+		if (!is_dir(dirname($targetImagePathFull))) {
+			// setting a custom error handler to catch a possible warning if the directory already exists
+			// this will happen if two PHP requests decide to create the new directory at the same time (race condition)
+			set_error_handler(array($this,'errorWarningSink'),E_WARNING);
+			mkdir(dirname($targetImagePathFull),0777,true);
+
+			// restore existing error handler
+			restore_error_handler();
+		}
 
 		// save image to temp file
 		switch ($sourceType) {
@@ -172,16 +182,22 @@ class Thummer {
 		if (!self::SHARPEN_THUMBNAIL) return;
 
 		// build matrix and divisor
-		$MATRIX = array(
+		$matrix = array(
 			array(-1.2,-1,-1.2),
 			array(-1,20,-1),
 			array(-1.2,-1,-1.2)
 		);
 
-		$DIVISOR = 11.2; // note: array_sum(array_map('array_sum',$MATRIX));
+		// apply to image
+		imageconvolution(
+			$image,$matrix,
+			11.2,0 // note: array_sum(array_map('array_sum',$matrix)) = 11.2;
+		);
+	}
 
-		// apply sharpen to image
-		imageconvolution($image,$MATRIX,$DIVISOR,0);
+	private function errorWarningSink() {
+
+		// sink it
 	}
 
 	private function logFailImage($source) {
