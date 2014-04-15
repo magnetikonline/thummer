@@ -79,10 +79,12 @@ class Thummer {
 		if (!is_file($srcPath)) return false;
 
 		// valid web image? return width/height/type
-		$detail = @getimagesize($srcPath);
+		set_error_handler(array($this,'errorWarningSink'));
+		$detail = getimagesize($srcPath);
+		restore_error_handler();
 
 		if (
-			(is_array($detail)) &&
+			($detail !== false) &&
 			(($detail[2] == IMAGETYPE_GIF) || ($detail[2] == IMAGETYPE_JPEG) || ($detail[2] == IMAGETYPE_PNG))
 		) return array($detail[0],$detail[1],$detail[2]);
 
@@ -134,10 +136,8 @@ class Thummer {
 		if (!is_dir(dirname($targetImagePathFull))) {
 			// setting a custom error handler to catch a possible warning if the directory already exists
 			// this will happen if two PHP requests decide to create the new directory at the same time (race condition)
-			set_error_handler(array($this,'errorWarningSink'),E_WARNING);
+			set_error_handler(array($this,'errorWarningSink'));
 			mkdir(dirname($targetImagePathFull),0777,true);
-
-			// restore existing error handler
 			restore_error_handler();
 		}
 
