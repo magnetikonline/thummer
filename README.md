@@ -3,6 +3,14 @@ Rhymes with hummer.
 
 This is an easy as pie web image thumbnail generator with width & height options given by request URL, plus thumbnail file caching back to original URL path - avoiding any server CPU overhead for repeated requests of the same thumbnail. Will handle JPEG, PNG and GIF images.
 
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [Install](#install)
+	- [Configure thummer.php](#configure-thummerphp)
+	- [Setup URL rewrite rules](#setup-url-rewrite-rules)
+	- [All done](#all-done)
+- [But what if my source images change?](#but-what-if-my-source-images-change)
+
 ## Requirements
 - PHP 5.2+ (tested against PHP 5.5.10)
 - [PHP GD extension](http://php.net/manual/en/book.image.php) (should be compiled into most PHP installs)
@@ -26,50 +34,20 @@ As a bonus, thummer will write the result of these thumbnails back to `/content/
 ## Install
 
 ### Configure thummer.php
-Drop [`thummer.php`](thummer.php) into your web app and update the class constants as follows:
+Drop [`thummer.php`](thummer.php) into your web app and update class constants as follows:
 
-<table>
-	<tr>
-		<td>MIN_LENGTH</td>
-		<td>Minimum width/height of a requested thumbnail, everything less will respond 404.</td>
-	</tr>
-	<tr>
-		<td>MAX_LENGTH</td>
-		<td>Maximum width/height of a requested thumbnail, everything larger will respond 404.</td>
-	</tr>
-	<tr>
-		<td>BASE_SOURCE_DIR</td>
-		<td>The base directory where images to thumbnail live, without trailing slash.</td>
-	</tr>
-	<tr>
-		<td>BASE_TARGET_DIR</td>
-		<td>Where thumbnailed images will be saved, placed into a directory structure matching the requested source image. Target directory must be in line with your desired thumbnail request URL path (e.g. <em>http://mywebsite.com/content/imagethumb/...</em> --&gt; <em>/[docroot]/content/imagethumb</em>). Ensure directory is writeable by your webserver/PHP processes. Without trailing slash.</td>
-	</tr>
-	<tr>
-		<td>REQUEST_PREFIX_URL_PATH</td>
-		<td>Prefix for thumbnail request URLs, before the <strong>/WxH/</strong> component. Without trailing slash.</td>
-	</tr>
-	<tr>
-		<td>SHARPEN_THUMBNAIL</td>
-		<td>If set <strong>true</strong> resized images will have a sharpen process applied before save. Implementation taken <a href="http://php.net/manual/en/function.imageconvolution.php#104006">from here</a>. This will more than likely result in extra CPU overhead, so you may wish to disable this option.</td>
-	</tr>
-	<tr>
-		<td>JPEG_IMAGE_QUALITY</td>
-		<td>Thumbnail save quality for JPEG image type. Between 0-100.</td>
-	</tr>
-	<tr>
-		<td>PNG_SAVE_TRANSPARENCY</td>
-		<td>If set <strong>true</strong>, PNG thumbnails will be saved with source image transparency preserved.</td>
-	</tr>
-	<tr>
-		<td>FAIL_IMAGE_URL_PATH</td>
-		<td>If thummer can't successfully read the source image, redirect user to the given fail image path.</td>
-	</tr>
-	<tr>
-		<td>FAIL_IMAGE_LOG</td>
-		<td>If thummer can't successfully read the source image, log image request here. Ensure file is writeable by webserver/PHP processes. Set <strong>false</strong> to disable.</td>
-	</tr>
-</table>
+Constant|Description
+----|----
+`MIN_LENGTH`|Minimum width/height of a requested thumbnail, everything less will respond 404.
+`MAX_LENGTH`|Maximum width/height of a requested thumbnail, everything larger will respond 404.
+`BASE_SOURCE_DIR`|The base directory where images to thumbnail live, without trailing slash.
+`BASE_TARGET_DIR`|Where thumbnailed images will be saved, placed into a directory structure matching the requested source image. Target directory must be in line with your desired thumbnail request URL path (e.g. *http://mywebsite.com/content/imagethumb/...* --&gt; */[docroot]/content/imagethumb*). Ensure directory is writeable by your webserver/PHP processes. Without trailing slash.
+`REQUEST_PREFIX_URL_PATH`|Prefix for thumbnail request URLs, before the **/WxH/** component. Without trailing slash.
+`SHARPEN_THUMBNAIL`|If set **true** resized images will have a sharpen process applied before save. Implementation taken [from here](http://php.net/manual/en/function.imageconvolution.php#104006). This will more than likely result in extra CPU overhead, so you may wish to disable this option.
+`JPEG_IMAGE_QUALITY`|Thumbnail save quality for JPEG image type. Between 0-100.
+`PNG_SAVE_TRANSPARENCY`|If set **true**, PNG thumbnails will be saved with source image transparency preserved.
+`FAIL_IMAGE_URL_PATH`|If thummer can't successfully read the source image, redirect user to the given fail image path.
+`FAIL_IMAGE_LOG`|If thummer can't successfully read the source image, log image request here. Ensure file is writeable by webserver/PHP processes. Set **false** to disable.
 
 ### Setup URL rewrite rules
 Refer to the supplied [`rewrite.nginx.conf`](rewrite.nginx.conf) & [`rewrite.apache.conf`](rewrite.apache.conf) for examples. For Apache, these rules can be placed into either a `.htaccess` file or (better yet) the web servers `/etc/apache2/apache2.conf`.
