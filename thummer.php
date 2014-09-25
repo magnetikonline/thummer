@@ -49,12 +49,16 @@ class Thummer {
 
 	private function getRequestedThumb($requestPath) {
 
-		// check for URL prefix - bail if not found
-		if (strpos($requestPath,self::REQUEST_PREFIX_URL_PATH) !== 0) return false;
-		$requestPath = substr($requestPath,strlen(self::REQUEST_PREFIX_URL_PATH));
+		// check for URL prefix - remove if found
+		$requestPath = (strpos($requestPath,self::REQUEST_PREFIX_URL_PATH) === 0)
+			? substr($requestPath,strlen(self::REQUEST_PREFIX_URL_PATH))
+			: $requestPath;
 
 		// extract target thumbnail dimensions & source image
-		if (!preg_match('{^/(\d{1,3})x(\d{1,3})(/.+)$}',trim($requestPath),$requestMatch)) return false;
+		if (!preg_match(
+			'{^/([0-9]{1,4})x([0-9]{1,4})(/.+)$}',
+			$requestPath,$requestMatch
+		)) return false;
 
 		// ensure width/height are within allowed bounds
 		$width = intval($requestMatch[1]);
