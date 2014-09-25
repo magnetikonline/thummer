@@ -43,9 +43,10 @@ Constant|Description
 `BASE_SOURCE_DIR`|The base directory where images to thumbnail live, without trailing slash.
 `BASE_TARGET_DIR`|Where thumbnailed images will be saved, placed into a directory structure matching the requested source image. Target directory must be in line with your desired thumbnail request URL path (e.g. *http://mywebsite.com/content/imagethumb/...* --&gt; */[docroot]/content/imagethumb*). Ensure directory is writeable by your webserver/PHP processes. Without trailing slash.
 `REQUEST_PREFIX_URL_PATH`|Prefix for thumbnail request URLs, before the **/WxH/** component. Without trailing slash.
-`SHARPEN_THUMBNAIL`|If set **true** resized images will have a sharpen process applied before save. Implementation taken [from here](http://php.net/manual/en/function.imageconvolution.php#104006). This will more than likely result in extra CPU overhead, so you may wish to disable this option.
+`SHARPEN_THUMBNAIL`|If **true** resized images will have a sharpen process applied before save. Implementation taken [from here](http://php.net/manual/en/function.imageconvolution.php#104006). This will more than likely result in extra CPU overhead, so you may wish to disable this option.
 `JPEG_IMAGE_QUALITY`|Thumbnail save quality for JPEG image type. Between 0-100.
-`PNG_SAVE_TRANSPARENCY`|If set **true**, PNG thumbnails will be saved with source image transparency preserved.
+`PNG_SAVE_TRANSPARENCY`|If **true**, PNG thumbnails will be saved with source image transparency preserved.
+`HTTP_THUMBNAIL_RESPONSE`|If **true** the just generated thumbnail binary will be written directly to client via PHP, otherwise a 301 redirect back to the thumbnail will be sent.
 `FAIL_IMAGE_URL_PATH`|If thummer can't successfully read the source image, redirect user to the given fail image path.
 `FAIL_IMAGE_LOG`|If thummer can't successfully read the source image, log image request here. Ensure file is writeable by webserver/PHP processes. Set **false** to disable.
 

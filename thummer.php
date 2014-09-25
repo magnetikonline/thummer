@@ -6,9 +6,13 @@ class Thummer {
 	const BASE_SOURCE_DIR = '/webapp/docroot/content/image';
 	const BASE_TARGET_DIR = '/webapp/docroot/content/imagethumb';
 	const REQUEST_PREFIX_URL_PATH = '/content/imagethumb';
+
 	const SHARPEN_THUMBNAIL = true;
 	const JPEG_IMAGE_QUALITY = 75;
 	const PNG_SAVE_TRANSPARENCY = false;
+
+	const HTTP_THUMBNAIL_RESPONSE = false;
+
 	const FAIL_IMAGE_URL_PATH = '/content/thumbfail.jpg';
 	const FAIL_IMAGE_LOG = false;
 
@@ -40,11 +44,21 @@ class Thummer {
 			return;
 		}
 
-		// source image all good
-		$this->generateThumbnail($requestedThumb,$sourceImageDetail);
+		// source image all good, create thumbnail on disk
+		$targetImagePathFull = $this->generateThumbnail($requestedThumb,$sourceImageDetail);
 
-		// redirect back to initial URL to display generated thumbnail image
-		$this->redirectURL($requestURI);
+		if (self::HTTP_THUMBNAIL_RESPONSE) {
+			// output the generated thumbnail binary to the client
+			if (is_file($targetImagePathFull)) {
+				header('Content-Length: ' . filesize($targetImagePathFull));
+				header('Content-Type: ' . $sourceImageDetail[3]);
+				readfile($targetImagePathFull);
+			}
+
+		} else {
+			// redirect back to initial URL to display generated thumbnail image
+			$this->redirectURL($requestURI);
+		}
 	}
 
 	private function getRequestedThumb($requestPath) {
@@ -90,7 +104,11 @@ class Thummer {
 		if (
 			($detail !== false) &&
 			(($detail[2] == IMAGETYPE_GIF) || ($detail[2] == IMAGETYPE_JPEG) || ($detail[2] == IMAGETYPE_PNG))
-		) return array($detail[0],$detail[1],$detail[2]);
+		) return array(
+			$detail[0],$detail[1], // width/height
+			$detail[2], // image type
+			$detail['mime'] // MIME type
+		);
 
 		// not a valid image(type)
 		return -1;
@@ -159,13 +177,15 @@ class Thummer {
 				imagepng($imageDst,$targetImagePathFullTemp);
 		}
 
+		// destroy GD image instances
+		imagedestroy($imageSrc);
+		imagedestroy($imageDst);
+
 		// move temp image file into place, avoiding race conditions between thummer requests and set modify timestamp to source image
 		rename($targetImagePathFullTemp,$targetImagePathFull);
 		touch($targetImagePathFull,filemtime(self::BASE_SOURCE_DIR . $targetImagePathSuffix));
 
-		// destroy GD image instances
-		imagedestroy($imageSrc);
-		imagedestroy($imageDst);
+		return $targetImagePathFull;
 	}
 
 	private function createSourceGDImage($type,$path) {
