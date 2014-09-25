@@ -224,7 +224,7 @@ class Thummer {
 				$_SERVER['HTTP_HOST'],
 				$targetPath
 			),
-			true,302
+			true,301
 		);
 	}
 }
