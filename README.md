@@ -3,7 +3,7 @@ Rhymes with hummer.
 
 This is an easy as pie web image thumbnail generator with width & height options given by request URL, plus thumbnail file caching back to original URL path - avoiding any server CPU overhead for repeated requests of the same thumbnail. Will handle JPEG, PNG and GIF images.
 
-- [Requirements](#requirements)
+- [Requires](#requires)
 - [Usage](#usage)
 - [Install](#install)
 	- [Configure thummer.php](#configure-thummerphp)
@@ -11,7 +11,7 @@ This is an easy as pie web image thumbnail generator with width & height options
 	- [All done](#all-done)
 - [But what if my source images change?](#but-what-if-my-source-images-change)
 
-## Requirements
+## Requires
 - PHP 5.2+ (tested against PHP 5.5.10)
 - [PHP GD extension](http://php.net/manual/en/book.image.php) (should be compiled into most PHP installs)
 - Nginx, Apache (or equivalent) URL rewrite support
@@ -46,7 +46,7 @@ Constant|Description
 `SHARPEN_THUMBNAIL`|If **true** resized images will have a sharpen process applied before save. Implementation taken [from here](http://php.net/manual/en/function.imageconvolution.php#104006). This will more than likely result in extra CPU overhead, so you may wish to disable this option.
 `JPEG_IMAGE_QUALITY`|Thumbnail save quality for JPEG image type. Between 0-100.
 `PNG_SAVE_TRANSPARENCY`|If **true**, PNG thumbnails will be saved with source image transparency preserved.
-`HTTP_THUMBNAIL_RESPONSE`|If **true** the just generated thumbnail binary will be written directly to client via PHP, otherwise a 301 redirect back to the thumbnail will be sent.
+`HTTP_THUMBNAIL_RESPONSE`|If **true** the generated thumbnail binary will be sent back to client via the PHP request - otherwise a 301 redirect to the thumbnail URL.
 `FAIL_IMAGE_URL_PATH`|If thummer can't successfully read the source image, redirect user to the given fail image path.
 `FAIL_IMAGE_LOG`|If thummer can't successfully read the source image, log image request here. Ensure file is writeable by webserver/PHP processes. Set **false** to disable.
 
